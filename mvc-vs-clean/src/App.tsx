@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
 import "./App.css";
+import { UserPage } from "./clean/presentation/UserPage";
+import { useUserController } from "./mvc/controller/useUserController";
 import { UserList } from "./mvc/view/UserList";
-import { getUsers, type User } from "./mvc/model/User";
 
 function App() {
-  const [users, setUsers] = useState<User[] | []>([]);
-
-  useEffect(() => {
-    async function fetchUsers() {
-      const resp = await getUsers();
-      setUsers(resp);
-    }
-
-    fetchUsers();
-  }, []);
-
-  if (users.length === 0) return <p>Cargando...</p>;
+  const { isLoadingUsers, users } = useUserController();
 
   return (
     <>
-      <UserList users={users} />
+      <UserList users={users} isLoading={isLoadingUsers} />
+
+      <p>--------------------</p>
+
+      <UserPage />
     </>
   );
 }
